@@ -1,0 +1,17 @@
+# RStudio
+.Rproj.user/
+*.Rproj
+
+# Output files
+output/
+
+# Data files
+# dataフォルダの中身をすべて無視する
+data/*
+# ただし、.gitkeepファイルは無視しない（フォルダを維持するため）
+!data/.gitkeep
+
+# 履歴ファイルなど
+.Rhistory
+.RData
+.Renviron```
