@@ -15,7 +15,7 @@ cat("1. Data Aggregation\n")
 temp_class_stats_file <- tempfile(fileext = ".csv")
 temp_word_stats_file  <- tempfile(fileext = ".csv")
 
-train_data_dir <- file.path(getwd(), "data", "learnU")
+train_data_dir <- file.path(getwd(), paths$train_data_dir)
 
 # Execute the Perl script to aggregate statistics from text files.
 system_status <- system2(
@@ -69,14 +69,14 @@ if (active_models$bernoulli_map) {
 
 # 4. Save Training Artifacts.
 cat("4. Save Training Artifacts\n")
-output_dir <- "output"
+output_dir <- paths$output_dir
 if (!dir.exists(output_dir)) {
   dir.create(output_dir, recursive = TRUE)
 }
 
-model_path <- file.path(output_dir, "model_nb_trained.RData")
-class_stats_path <- file.path(output_dir, "stats_class.csv")
-word_stats_path <- file.path(output_dir, "stats_word.csv")
+model_path <- file.path(output_dir, paths$model_output_file)
+class_stats_path <- file.path(output_dir, paths$class_stats_output_file)
+word_stats_path <- file.path(output_dir, paths$word_stats_output_file)
 
 # Save aggregated statistics for inspection.
 cat("   ...saving aggregated statistics to CSV.\n")

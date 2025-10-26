@@ -8,3 +8,6 @@ WORKDIR /home/rstudio/project
 RUN sudo apt-get update && \
     sudo apt-get install -y perl && \
     sudo rm -rf /var/lib/apt/lists/*
+
+# Install required R packages.
+RUN R -e "install.packages('data.table', repos = 'https://cloud.r-project.org/')"

@@ -1,10 +1,11 @@
 # src/main_classify.R
 # Main script for classification and evaluation.
 
+source('src/config.R') # Load configuration
 source('src/alg_nb_classify.R')
 
-model_input_path <- "output/model_nb_trained.RData"
-classification_data_dir <- "data/correctU"
+model_input_path <- file.path(paths$output_dir, paths$model_output_file)
+classification_data_dir <- paths$classify_data_dir
 
 # 1. Load Models.
 cat("1. Load Models\n")
