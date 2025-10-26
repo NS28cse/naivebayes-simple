@@ -1,50 +1,45 @@
 # src/util_text_aggregate.pl.
 # Aggregates word and class statistics from a directory of text files.
-# Input: A directory specified by a command-line argument.
-# Output: Writes TSV-formatted statistics to two specified output files.
 
 use strict;
 use warnings;
 
-# --- Start of encoding fix ---
-# Force UTF-8 encoding for the script itself and for all I/O handles.
-# This is the most robust way to handle Unicode characters.
+# Force UTF-8 for the script itself and all I/O handles.
 use utf8;
 use open qw(:std :utf8);
-# --- End of encoding fix ---
 
 use File::Find;
 
-# Get arguments from the command line.
+# Get command line arguments.
 my $train_dir      = $ARGV[0] or die "Usage: $0 <train_dir> <class_stats_out> <word_stats_out>\n";
 my $class_out_file = $ARGV[1] or die "Usage: $0 <train_dir> <class_stats_out> <word_stats_out>\n";
 my $word_out_file  = $ARGV[2] or die "Usage: $0 <train_dir> <class_stats_out> <word_stats_out>\n";
 
-
-# Global Variables.
 my %class_stats; 
 my %word_stats;  
 
-# Main Logic.
+# Start finding and processing files.
 find(\&process_file, $train_dir);
 print_class_stats();
 print_word_stats();
 exit;
 
-# Subroutine to process a single file.
+# Subroutine to process a single file found by File::Find.
 sub process_file {
     my $filepath = $File::Find::name;
     return unless -f $filepath && $filepath =~ /\.txt$/;
 
-    # The regex for extracting class is now more robust against path variations.
+    # Extract class ID from the parent directory name.
     my ($class) = ($filepath =~ m|/(\d+)/[^/]+$|);
     return unless defined $class;
 
     $class_stats{$class}{'N_c'}++;
 
-    # open with explicit UTF-8 encoding.
+    # Open with explicit UTF-8 encoding.
     open my $fh, '<:encoding(UTF-8)', $filepath or die "Cannot open $filepath: $!";
     my %words_in_doc;
+    
+    # Aggregate counts for T_wc (total words in class) and T_c (total words in class).
     while (my $line = <$fh>) {
         chomp $line;
         my @words = split /[ 　]+/, $line;
@@ -57,12 +52,13 @@ sub process_file {
     }
     close $fh;
 
+    # Aggregate counts for N_wc (docs containing word in class).
     foreach my $word (keys %words_in_doc) {
         $word_stats{$word}{$class}{'N_wc'}++;
     }
 }
 
-# Prints class-level statistics to a file using tabs as separators.
+# Prints class-level statistics (N_c, T_c) to the output file.
 sub print_class_stats {
     open my $fh, '>', $class_out_file or die "Cannot open $class_out_file: $!";
     print $fh "class\tN_c\tT_c\n";
@@ -74,7 +70,7 @@ sub print_class_stats {
     close $fh;
 }
 
-# Prints word-level statistics to a file using tabs as separators.
+# Prints word-level statistics (T_wc, N_wc) to the output file.
 sub print_word_stats {
     open my $fh, '>', $word_out_file or die "Cannot open $word_out_file: $!";
     print $fh "word\tclass\tT_wc\tN_wc\n";

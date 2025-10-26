@@ -1,17 +1,20 @@
-# RStudio
+# RStudio project-specific files.
 .Rproj.user/
 *.Rproj
 
-# Output files
+# Ignored output directory.
 output/
 
-# Data files
-# dataフォルダの中身をすべて無視する
-data/*
-# ただし、.gitkeepファイルは無視しない（フォルダを維持するため）
-!data/.gitkeep
+# Ignore all contents in the data directory.
+/data/*
 
-# 履歴ファイルなど
+# Also ignore dotfiles (like .DS_Store) inside data.
+/data/.*
+
+# But DO NOT ignore the .gitkeep file, to keep the directory tracked.
+!/data/.gitkeep
+
+# R environment history and data files.
 .Rhistory
 .RData
-.Renviron```
+.Renviron

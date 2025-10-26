@@ -1,4 +1,4 @@
-# Set a model to TRUE to enable it, or FALSE to disable it.
+# Configuration to enable or disable specific models.
 
 active_models <- list(
   "bernoulli_mle"   = TRUE,

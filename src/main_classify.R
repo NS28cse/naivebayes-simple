@@ -1,27 +1,22 @@
 # src/main_classify.R
-# Main script to classify new documents and evaluate model accuracy.
-# It loads the trained models and applies them to a directory of test files,
-# then calculates and prints the accuracy for each available model.
+# Main script for classification and evaluation.
 
-# 0. Setup
-# Load the classification algorithm implementations.
 source('src/alg_nb_classify.R')
 
-# Define paths for the models and the data to be classified.
 model_input_path <- "output/model_nb_trained.RData"
 classification_data_dir <- "data/correctU"
 
-# 1. Load Models
+# 1. Load Models.
 cat("1. Load Models\n")
 if (!file.exists(model_input_path)) {
   stop("Model file not found. Please run the training script (main_train.R) first.")
 }
-load(model_input_path) # This loads the 'models' list object.
+load(model_input_path) # Loads the 'models' list object.
 cat("   ...loaded", length(models), "models from", model_input_path, "\n")
 
-# 2. Find Files and Prepare for Evaluation
+# 2. Find Files and Prepare for Evaluation.
 cat("2. Find Files and Prepare for Evaluation\n")
-# Recursively find all .txt files in the target directory.
+# Recursively find all .txt files in the test directory.
 files_to_classify <- list.files(
   path = classification_data_dir,
   pattern = "\\.txt$",
@@ -33,18 +28,16 @@ if (length(files_to_classify) == 0) {
 }
 cat("   ...", length(files_to_classify), "files found for classification.\n")
 
-# Prepare a structure to hold evaluation results (correct counts).
 model_names <- names(models)
 correct_counts <- setNames(rep(0, length(model_names)), model_names)
 
-# 3. Classify Documents and Evaluate
+# 3. Classify Documents and Evaluate.
 cat("3. Classify Documents and Evaluate\n")
 # Loop through each file, classify it, and check against the true label.
 for (filepath in files_to_classify) {
-  # The true class is the name of the parent directory.
+  # The true class is the parent directory name.
   true_class <- basename(dirname(filepath))
   
-  # Get the words from the document once.
   words_in_doc <- get_words_from_doc(filepath)
   
   # Classify with each available model.
@@ -67,7 +60,7 @@ for (filepath in files_to_classify) {
 }
 cat("   ...classification and evaluation complete.\n")
 
-# 4. Display Final Results
+# 4. Display Final Results.
 cat("4. Display Final Accuracy Results\n")
 total_files <- length(files_to_classify)
 cat("----------------------------------------\n")
