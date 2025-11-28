@@ -30,7 +30,8 @@ sub process_file {
     return unless -f $filepath && $filepath =~ /\.txt$/;
 
     # Extract class ID from the parent directory name.
-    my ($class) = ($filepath =~ m|/(\d+)/[^/]+$|);
+    # MODIFIED: Changed (\d+) to ([^/]+) to allow non-numeric class names.
+    my ($class) = ($filepath =~ m|/([^/]+)/[^/]+$|);
     return unless defined $class;
 
     $class_stats{$class}{'N_c'}++;
@@ -62,7 +63,8 @@ sub process_file {
 sub print_class_stats {
     open my $fh, '>', $class_out_file or die "Cannot open $class_out_file: $!";
     print $fh "class\tN_c\tT_c\n";
-    foreach my $class (sort { $a <=> $b } keys %class_stats) {
+    # MODIFIED: Use string comparison (cmp) for sorting classes.
+    foreach my $class (sort { $a cmp $b } keys %class_stats) {
         my $Nc = $class_stats{$class}{'N_c'} // 0;
         my $Tc = $class_stats{$class}{'T_c'} // 0;
         print $fh "$class\t$Nc\t$Tc\n";
@@ -75,7 +77,8 @@ sub print_word_stats {
     open my $fh, '>', $word_out_file or die "Cannot open $word_out_file: $!";
     print $fh "word\tclass\tT_wc\tN_wc\n";
     foreach my $word (sort keys %word_stats) {
-        foreach my $class (sort { $a <=> $b } keys %{$word_stats{$word}}) {
+        # MODIFIED: Use string comparison (cmp) for sorting classes.
+        foreach my $class (sort { $a cmp $b } keys %{$word_stats{$word}}) {
             my $Twc = $word_stats{$word}{$class}{'T_wc'} // 0;
             my $Nwc = $word_stats{$word}{$class}{'N_wc'} // 0;
             if ($Twc > 0 || $Nwc > 0) {
