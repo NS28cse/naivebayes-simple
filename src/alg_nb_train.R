@@ -35,7 +35,8 @@ train_multinomial_nb_mle <- function(class_stats, word_stats) {
 # Trains a Multinomial Naive Bayes model using MAP (Laplace Smoothing).
 train_multinomial_nb_map <- function(class_stats, word_stats) {
   N <- sum(class_stats$N_c)
-  log_priors <- log(class_stats$N_c / N)
+  num_classes <- nrow(class_stats)
+  log_priors <- log((class_stats$N_c + 1) / (N + num_classes))
   names(log_priors) <- class_stats$class
   
   # Vocabulary size for smoothing.
@@ -97,7 +98,8 @@ train_bernoulli_nb_mle <- function(class_stats, word_stats) {
 # Trains a Bernoulli Naive Bayes model using MAP (Laplace Smoothing).
 train_bernoulli_nb_map <- function(class_stats, word_stats) {
   N <- sum(class_stats$N_c)
-  log_priors <- log(class_stats$N_c / N)
+  num_classes <- nrow(class_stats)
+  log_priors <- log((class_stats$N_c + 1) / (N + num_classes))
   names(log_priors) <- class_stats$class
   
   ws_dt <- as.data.table(word_stats)
