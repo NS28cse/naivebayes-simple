@@ -21,7 +21,7 @@ my %class_stats;
 my %word_stats;  
 
 # Traverse the directory tree and process each file.
-find({ wanted => \&process_file, no_chdir => 1 }, $input_dir);
+find({ wanted => \&process_file, no_chdir => 1 }, $train_dir);
 
 # Output the aggregated statistics.
 print_class_stats();

@@ -40,7 +40,7 @@ if (system_status != 0) {
 }
 
 # Load the preprocessed data using fread.
-dt_test <- fread(temp_classify_data, sep = "\t", header = TRUE, encoding = "UTF-8")
+dt_test <- fread(temp_classify_data, sep = "\t", header = TRUE, encoding = "UTF-8", quote = "")
 unlink(temp_classify_data)
 
 if (nrow(dt_test) == 0) {
