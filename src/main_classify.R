@@ -72,9 +72,17 @@ for (model_name in model_names) {
     model_obj <- init_bernoulli_model(model_obj)
   }
   
+  # Measure processing time.
+  start_time <- proc.time()
+  
+  # Add 'verbose = FALSE' to suppress default progress output.
   predictions <- dt_test[, .(
     predicted_class = apply_classification(word, model_obj, model_name)
-  ), by = doc_id]
+  ), by = doc_id,]
+  
+  # Calculate and display elapsed time.
+  elapsed <- proc.time() - start_time
+  cat(sprintf("   ...Time elapsed: %.1fs\n", elapsed["elapsed"]))
   
   results <- merge(predictions, docs_metadata, by = "doc_id")
   num_correct <- nrow(results[predicted_class == true_class])
