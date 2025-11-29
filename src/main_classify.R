@@ -75,7 +75,6 @@ for (model_name in model_names) {
   # Measure processing time.
   start_time <- proc.time()
   
-  # Add 'verbose = FALSE' to suppress default progress output.
   predictions <- dt_test[, .(
     predicted_class = apply_classification(word, model_obj, model_name)
   ), by = doc_id,]
