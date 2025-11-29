@@ -10,7 +10,7 @@ active_models <- list(
 
 params <- list(
   # Set the smoothing parameter alpha for MAP estimation.
-  "alpha" = 1.0
+  "alpha" = 2.0
 )
 
 paths <- list(
