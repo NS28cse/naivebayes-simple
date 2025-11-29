@@ -10,7 +10,7 @@ active_models <- list(
 # Configuration for file paths.
 paths <- list(
   # Input directories
-  "train_data_dir"  = "data/learnU_x20",
+  "train_data_dir"  = "data/learnU",
   "classify_data_dir" = "data/correctU",
   
   # Output directory
