@@ -21,7 +21,7 @@ train_data_dir <- file.path(getwd(), paths$train_data_dir)
 system_status <- system2(
   'perl',
   args = c(
-    'src/util_text_aggregate.pl',
+    'src/util_train.pl',
     train_data_dir,
     temp_class_stats_file,
     temp_word_stats_file

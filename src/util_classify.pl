@@ -21,7 +21,7 @@ open my $out_fh, '>', $output_file or die "Cannot open $output_file: $!";
 print $out_fh "doc_id\ttrue_class\tword\n";
 
 # Traverse the directory tree and process each file.
-find(\&process_file, $input_dir);
+find({ wanted => \&process_file, no_chdir => 1 }, $input_dir);
 
 close $out_fh;
 exit;

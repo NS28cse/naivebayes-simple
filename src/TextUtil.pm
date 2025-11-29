@@ -9,11 +9,13 @@ use Exporter 'import';
 # Export functions for external use.
 our @EXPORT_OK = qw(get_words_from_line extract_class_from_path);
 
-# Splits a text line into words based on half-width or full-width spaces.
+# Splits a text line into words using any whitespace characters as delimiters.
 sub get_words_from_line {
     my ($line) = @_;
     chomp $line;
-    my @words = split /[ 　]+/, $line;
+    # Split by any whitespace characters (spaces, tabs, newlines, etc.).
+    my @words = split /\s+/, $line;
+    # Filter out empty strings and return the list.
     return grep { $_ ne '' } @words;
 }
 
