@@ -6,6 +6,7 @@
 # --- Configuration ---
 
 # 1. Define the number of files to combine into one chunk.
+# learnU_x(CHUNK_SIZE).
 CHUNK_SIZE <- 20
 
 # 2. Define the base data directory.

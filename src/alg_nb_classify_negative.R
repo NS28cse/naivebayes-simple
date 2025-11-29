@@ -53,7 +53,7 @@ init_bernoulli_model <- function(model) {
     val_lik <- log_lik[[col]]
     val_neg <- log_neg[[col]] 
     d <- val_lik - val_neg
-    d[is.infinite(d)] <- 0
+    d[d == Inf] <- 0
     set(diff_dt, j = col, value = d)
   }
   
