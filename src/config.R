@@ -9,15 +9,15 @@ active_models <- list(
 
 # Configuration for file paths.
 paths <- list(
-  # Input directories
-  "train_data_dir"  = "data/learnU_75",
+  "train_data_dir"  = "data/learnU_10",
   "classify_data_dir" = "data/correctU",
-  
-  # Output directory
   "output_dir" = "output",
-  
-  # Artifact filenames
   "model_output_file" = "model_nb_trained.RData",
   "class_stats_output_file" = "stats_class.csv",
-  "word_stats_output_file" = "stats_word.csv"
+  "word_stats_output_file" = "stats_word.csv",
+  
+  # Path to the algorithm implementation file.
+  # Use src/alg_nb_classify.R for the standard addition method.
+  # Use src/alg_nb_classify_negative.R for the optimized subtraction method.
+  "bernoulli_impl_file" = "src/alg_nb_classify_negative.R"
 )
