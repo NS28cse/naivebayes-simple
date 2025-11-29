@@ -1,12 +1,13 @@
-# Implements the training logic for Naive Bayes classifiers.
+# Implement training logic for Naive Bayes classifiers.
 
 if (!requireNamespace("data.table", quietly = TRUE)) {
   install.packages("data.table")
 }
 library(data.table)
 
-# Trains a Multinomial Naive Bayes model using MLE.
+# Train a Multinomial Naive Bayes model using MLE.
 train_multinomial_nb_mle <- function(class_stats, word_stats) {
+  # Calculate log priors based on class counts.
   N <- sum(class_stats$N_c)
   log_priors <- log(class_stats$N_c / N)
   names(log_priors) <- class_stats$class
@@ -14,6 +15,7 @@ train_multinomial_nb_mle <- function(class_stats, word_stats) {
   ws_dt <- as.data.table(word_stats)
   cs_dt <- as.data.table(class_stats)
   
+  # Calculate log likelihoods from word counts.
   log_likelihoods <- ws_dt[, .(
     word = word,
     log_prob = ifelse(
@@ -28,10 +30,11 @@ train_multinomial_nb_mle <- function(class_stats, word_stats) {
   return(list(log_priors = log_priors, log_likelihoods = log_likelihoods_wide))
 }
 
-# Trains a Multinomial Naive Bayes model using MAP.
+# Train a Multinomial Naive Bayes model using MAP estimation with smoothing.
 train_multinomial_nb_map <- function(class_stats, word_stats, alpha = 2.0) {
   smoothing_numerator <- alpha - 1
   
+  # Calculate log priors with smoothing.
   N <- sum(class_stats$N_c)
   num_classes <- nrow(class_stats)
   log_priors <- log((class_stats$N_c + smoothing_numerator) / (N + num_classes * smoothing_numerator))
@@ -42,11 +45,13 @@ train_multinomial_nb_map <- function(class_stats, word_stats, alpha = 2.0) {
   ws_dt <- as.data.table(word_stats)
   cs_dt <- as.data.table(class_stats)
   
+  # Calculate log likelihoods with smoothing.
   log_likelihoods <- ws_dt[, .(
     word = word,
     log_prob = log((T_wc + smoothing_numerator) / (cs_dt[class == .BY[[1]], T_c] + V * smoothing_numerator))
   ), by = class]
   
+  # Handle unseen words using the smoothing term.
   unseen_word_log_prob <- cs_dt[, .(log_prob = log(smoothing_numerator / (T_c + V * smoothing_numerator))), by = class]
   
   all_words <- unique(ws_dt$word)
@@ -64,8 +69,9 @@ train_multinomial_nb_map <- function(class_stats, word_stats, alpha = 2.0) {
   return(list(log_priors = log_priors, log_likelihoods = log_likelihoods_wide))
 }
 
-# Trains a Bernoulli Naive Bayes model using MLE.
+# Train a Bernoulli Naive Bayes model using MLE.
 train_bernoulli_nb_mle <- function(class_stats, word_stats) {
+  # Calculate log priors based on class counts.
   N <- sum(class_stats$N_c)
   log_priors <- log(class_stats$N_c / N)
   names(log_priors) <- class_stats$class
@@ -73,6 +79,7 @@ train_bernoulli_nb_mle <- function(class_stats, word_stats) {
   ws_dt <- as.data.table(word_stats)
   cs_dt <- as.data.table(class_stats)
   
+  # Calculate log likelihoods from document counts.
   log_likelihoods <- ws_dt[, .(
     word = word,
     log_prob = ifelse(
@@ -87,10 +94,11 @@ train_bernoulli_nb_mle <- function(class_stats, word_stats) {
   return(list(log_priors = log_priors, log_likelihoods = log_likelihoods_wide))
 }
 
-# Trains a Bernoulli Naive Bayes model using MAP.
+# Train a Bernoulli Naive Bayes model using MAP estimation with smoothing.
 train_bernoulli_nb_map <- function(class_stats, word_stats, alpha = 2.0) {
   smoothing_numerator <- alpha - 1
   
+  # Calculate log priors with smoothing.
   N <- sum(class_stats$N_c)
   num_classes <- nrow(class_stats)
   log_priors <- log((class_stats$N_c + smoothing_numerator) / (N + num_classes * smoothing_numerator))
@@ -99,11 +107,13 @@ train_bernoulli_nb_map <- function(class_stats, word_stats, alpha = 2.0) {
   ws_dt <- as.data.table(word_stats)
   cs_dt <- as.data.table(class_stats)
   
+  # Calculate log likelihoods with smoothing.
   log_likelihoods <- ws_dt[, .(
     word = word,
     log_prob = log((N_wc + smoothing_numerator) / (cs_dt[class == .BY[[1]], N_c] + 2 * smoothing_numerator))
   ), by = class]
   
+  # Handle unseen words using the smoothing term.
   unseen_word_log_prob <- cs_dt[, .(log_prob = log(smoothing_numerator / (N_c + 2 * smoothing_numerator))), by = class]
   
   all_words <- unique(ws_dt$word)

@@ -8,7 +8,7 @@ active_models <- list(
 
 # Hyperparameters for the models.
 params <- list(
-  "alpha" = 100.0
+  "alpha" = 2.0
 )
 
 # Configuration for file paths.
