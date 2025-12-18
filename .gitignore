@@ -1,6 +1,5 @@
 # RStudio project-specific files.
 .Rproj.user/
-*.Rproj
 
 # Ignored output directory.
 output/

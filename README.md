@@ -33,6 +33,9 @@ docker run --rm -d \
 ```
 localhostでコンテナと外がつながっているので，外のブラウザのアドレス欄に`http://localhost:8787`を入力し実行するとRstudioが起動する．
 
+Username: rstudio (or root)
+Password: yourpassword
+
 右下のFilesペインに何も表示されていなければ，その右上の三点リーダーに`/home`と入力すればディレクトリが表示される.
 
 `project.Rproj`をクリックして起動．
